@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">CRUD de Medicos</ui:define>
+        <ui:define name="conteudo">
+            
+            <h:form id="formListagem" prependId="false">
+                <p:growl />
+                <p:commandButton value="Novo" actionListener="#{controleMedico.novo()}" icon="pi pi-plus" update="formEdicao" process="@this" oncomplete="PF('dlg').show();" />
+                
+                <p:dataTable value="#{controleMedico.dao.listaObjetos}" var="obj" id="listagem">
+                    <p:column headerText="ID">
+                        <p:outputLabel value="#{obj.id}"/>
+                    </p:column>
+                    
+                    <p:column headerText="CRM">
+                        <p:outputLabel value="#{obj.crm}"/>
+                    </p:column>
+                    
+                    
+                    <p:column headerText="Nome">
+                        <p:outputLabel value="#{obj.nome}"/>
+                    </p:column>
+                    
+                    <p:column headerText="Ações">
+                        <div align="center">
+                            <p:commandButton actionListener="#{controleMedico.alterar(obj.id)}" icon="pi pi-pencil" title="Editar" update="formEdicao" process="@this" oncomplete="PF('dlg').show();"/>
+                            <p:commandButton actionListener="#{controleMedico.remover(obj.id)}" icon="pi pi-trash" title="Remover" update="@form" process="@this" onclick="if (!confirm('Confirma a exclusão?')) return false"/>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            
+            <p:dialog header="Edição" widgetVar="dlg" resizable="false" modal="true" width="50%" height="100%">
+                
+                <h:form id="formEdicao" prependId="false">
+                    <p:growl id="growl"/>
+                    
+                    <div align="center">
+                        <p:panelGrid columns="2">
+                            
+                            <p:outputLabel value="ID"/>
+                            <p:inputText value="#{controleMedico.objeto.id}" readonly="true" size="5"/>
+                            
+                            <p:outputLabel value="CRM" for="txtCRM"/>
+                            <p:inputText id="txtCRM" value="#{controleMedico.objeto.crm}" size="6" maxlength="6" placeholder="xx-xxx"/>
+                            
+                            <p:outputLabel value="Nome" for="txtNome"/>
+                            <p:inputText id="txtNome" value="#{controleMedico.objeto.nome}" size="50" maxlength="50" placeholder="Obrigatório"/>
+                            
+                            <p:outputLabel value="Nascimento" for="txtNascimento"/>
+                            <p:calendar id="txtNascimento" value="#{controleMedico.objeto.nascimento}" mask="true" pattern="dd/MM/yyyy" navigator="true" size="10">
+                                <f:converter converterId="converterCalendar"/>
+                            </p:calendar>
+                                
+                            <p:outputLabel value="Telefone" for="txtTelefone"/>
+                            <p:inputText id="txtTelefone" value="#{controleMedico.objeto.telefone}" size="14" maxlength="14" placeholder="(xx)xxxxx-xxxx"/>
+                            
+                            <p:outputLabel value="Sexo" for="txtSexo"/>
+                            <p:inputText id="txtSexo" value="#{controleMedico.objeto.sexo}" size="9" maxlength="9" placeholder="Obrigatório"/>
+                            
+                            <p:outputLabel value="Historico" for="txtHistorico"/>
+                            <p:inputText id="txtHistorico" value="#{controleMedico.objeto.historico}" placeholder="Obrigatório"/>
+                            
+                            <p:outputLabel value="Peso" for="txtPeso"/>
+                            <p:inputText id="txtPeso" value="#{controleMedico.objeto.peso}" size="50" maxlength="50" placeholder="Obrigatório"/>
+                            
+                            <p:outputLabel value="Altura" for="txtAltura"/>
+                            <p:inputText id="txtAltura" value="#{controleMedico.objeto.altura}" size="50" maxlength="50" placeholder="Obrigatório"/>
+                            
+                            <p:outputLabel value="Especialidade" for="selectEspecialidade"/>
+                            <p:selectOneMenu id="selectEspecialidade" value="#{controleMedico.objeto.especialidade}" filter="true" filterMatchMode="startWith">
+                                <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
+                                <f:converter binding="#{converterEspecialidade}"/>
+                                <f:selectItems value="#{controleMedico.daoEspecialidade.listaTodos}" var="esp" itemLabel="#{esp.id}"/>
+                            </p:selectOneMenu>
+                        
+                        </p:panelGrid>
+                    </div>
+                    
+                    <p:panel>
+                        <div align="center">
+                            <p:commandButton value="Salvar" actionListener="#{controleMedico.salvar()}" icon="pi pi-save" update="formEdicao formListagem" process="@form" oncomplete="if(!args.validationFailed) {PF('dlg').hide();}"/>
+                        </div>
+                    </p:panel>
+                
+                </h:form>
+            
+            </p:dialog>
+            
+        </ui:define>
+    </ui:composition>
+
+</html>
