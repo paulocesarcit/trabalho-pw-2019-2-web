@@ -15,9 +15,28 @@
                 
                 <p:menuitem value="Home" url="#{facesContext.externalContext.requestContextPath}/index.xhtml" icon="pi pi-home"/>
                 
-                <p:submenu label="Cadastros">
+                <p:submenu label="Usuario: #{controleLogin.usuarioAutenticado != null ?
+                    controleLogin.usuarioAutenticado.nome : ''}" >
+                    <p:column>
+                        <p:submenu label="Efetuar login"
+                        rendered="#{controleLogin.usuarioAutenticado == null}">
+                            <p:menuitem action="#{controleLogin.paginaLogin()}"
+                            value="Login" icon="pi pi-user"
+                            ajax="false"/>
+                        </p:submenu>
+                        <p:submenu label="Efetuar logout"
+                        rendered="#{controleLogin.usuarioAutenticado != null}">
+                            <p:menuitem action="#{controleLogin.efetuarLogout()}"
+                            value="Logout" icon="pi pi-power-off"
+                            ajax="false"/>
+                        </p:submenu>
+                    </p:column>
+                </p:submenu>
+                
+                <p:submenu label="Cadastros" ><!--<p:submenu label="Cadastros" rendered="#{controleLogin.usuarioAutenticado != null}">-->
                     <p:column>
                         <p:submenu label="Básicos">
+                            <p:menuitem action="#{controleConsulta.listar()}" value="Consulta" ajax="false"/>
                             <p:menuitem action="#{controleEspecialidade.listar()}" value="Especialidade" ajax="false"/>
                             <p:menuitem action="#{controleMedicamento.listar()}" value="Medicamento" ajax="false"/>
                             <p:menuitem action="#{controleMedico.listar()}" value="Medico" ajax="false"/>

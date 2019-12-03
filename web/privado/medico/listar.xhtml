@@ -31,7 +31,7 @@
                     <p:column headerText="Ações">
                         <div align="center">
                             <p:commandButton actionListener="#{controleMedico.alterar(obj.id)}" icon="pi pi-pencil" title="Editar" update="formEdicao" process="@this" oncomplete="PF('dlg').show();"/>
-                            <p:commandButton actionListener="#{controleMedico.remover(obj.id)}" icon="pi pi-trash" title="Remover" update="@form" process="@this" onclick="if (!confirm('Confirma a exclusão?')) return false"/>
+                            <p:commandButton actionListener="#{controleMedico.remover(obj.id)}" icon="pi pi-trash" title="Remover" update="@form" process="@this" rendered="#{p:ifGranted('ADMINISTRADOR')}" onclick="if (!confirm('Confirma a exclusão?')) return false"/>
                         </div>
                     </p:column>
                 </p:dataTable>
